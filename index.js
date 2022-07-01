@@ -10,11 +10,13 @@ const portraitMap = {
     'paladin': '701/400/473/c3paladinintro.png',
     'monk': '700/400/490/c3monkintro.png',
     'ranger': '707/400/444/c3rangerintro.png',
-    'rogue': '0/709/375/480/c3rogueintro.png',
-    'sorcerer':'0/712/400/517/c3sorcererintro.png',
+    'rogue': '709/375/480/c3rogueintro.png',
+    'sorcerer':'712/400/517/c3sorcererintro.png',
     'wizard':'717/400/484/c3wizardintro.png',
-    'warlock':'0/716/400/512/c3warlockintro.png'
+    'warlock':'716/400/512/c3warlockintro.png'
 }
+
+const charImg=document.getElementById('character-img')
 
 let request = async ()=>{
     let req = await fetch(`${apiURL}/classes`)
@@ -22,16 +24,15 @@ let request = async ()=>{
     res.results.forEach((className)=>{
         let classOption = document.createElement('option')
         classOption.textContent = className.name
-        classOption.value = className.index
+        classOption.value = className.name
         classSelector.appendChild(classOption)
     })
 
     classSelector.addEventListener('change',(e)=>{
-        document.getElementById('selected-class').innerText = e.target.value
-        let img = document.createElement('img')
-        img.src=`${baseImageURL}${portraitMap[e.target.value.toLowerCase()]}`
-        // let imageDiv=document.getElementById('character')
-
+        document.getElementById('selected-class').innerText = e.target.value        
+        let src=`${baseImageURL}${portraitMap[e.target.value.toLowerCase()]}`
+        charImg.src=src
+        charImg.classList.remove('hidden')
     })
 }
 
