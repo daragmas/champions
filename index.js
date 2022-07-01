@@ -17,6 +17,7 @@ const portraitMap = {
 }
 
 const charImg=document.getElementById('character-img')
+const profList = document.getElementById('proficiency-list')
 
 let request = async ()=>{
     let req = await fetch(`${apiURL}/classes`)
@@ -28,11 +29,22 @@ let request = async ()=>{
         classSelector.appendChild(classOption)
     })
 
-    classSelector.addEventListener('change',(e)=>{
+    classSelector.addEventListener('change', async (e)=>{
         document.getElementById('selected-class').innerText = e.target.value        
         let src=`${baseImageURL}${portraitMap[e.target.value.toLowerCase()]}`
         charImg.src=src
         charImg.classList.remove('hidden')
+
+        req = await fetch(`${apiURL}/classes/${e.target.value.toLowerCase()}`)
+        res= await req.json()
+        profList.innerHTML=''
+
+        res.proficiencies.forEach((prof)=>{
+            let li = document.createElement('li')
+            li.innerText = prof.name
+            profList.append(li)
+        })
+        profList.classList.remove('hidden')
     })
 }
 
