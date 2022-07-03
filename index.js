@@ -27,6 +27,8 @@ const portraitMap = {
 
 const charImg=document.getElementById('character-img')
 const profList = document.getElementById('proficiency-list')
+const charName = document.getElementById('character-name')
+const profListLabel = document.getElementById('prof-list-label')
 
 let request = async ()=>{
     let req = await fetch(`${apiURL}/classes`)
@@ -54,6 +56,15 @@ let request = async ()=>{
             profList.append(li)
         })
         profList.classList.remove('hidden')
+        charName.classList.remove('hidden')
+        profListLabel.classList.remove('hidden')
+    })
+
+    charName.addEventListener('click', async () =>{
+        let currentName = charName.textContent
+        charName.textContent = prompt('Rename Character',currentName)
+        if (!charName.textContent){charName.textContent=currentName}
+
     })
 }
 
