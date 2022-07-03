@@ -15,6 +15,15 @@ const portraitMap = {
     'wizard':'717/400/484/c3wizardintro.png',
     'warlock':'716/400/512/c3warlockintro.png'
 }
+/* To Do:
+    Look into portraitMap, and see how to add multiple objects to a class
+    Add spellcaster Boolean to classes to denote which ones need spell list look ups
+    Get spells by class, seperate spells by spell level
+
+    Add character naming
+    Add character saving
+    Add multiple character slots
+*/ 
 
 const charImg=document.getElementById('character-img')
 const profList = document.getElementById('proficiency-list')
