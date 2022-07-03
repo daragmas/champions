@@ -10,3 +10,8 @@ body{
     height: 350px;
     width: 350px;
 }
+
+#character-sheet{
+    justify-content: left;
+    text-align:start
+}

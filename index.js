@@ -29,6 +29,8 @@ const charImg=document.getElementById('character-img')
 const profList = document.getElementById('proficiency-list')
 const charName = document.getElementById('character-name')
 const profListLabel = document.getElementById('prof-list-label')
+const spellListLabel = document.getElementById('spell-list-label')
+const spellList = document.getElementById('spell-list')
 
 let request = async ()=>{
     let req = await fetch(`${apiURL}/classes`)
@@ -41,12 +43,13 @@ let request = async ()=>{
     })
 
     classSelector.addEventListener('change', async (e)=>{
-        document.getElementById('selected-class').innerText = e.target.value        
-        let src=`${baseImageURL}${portraitMap[e.target.value.toLowerCase()]}`
+        let classTarget = e.target.value
+        document.getElementById('selected-class').innerText = classTarget        
+        let src=`${baseImageURL}${portraitMap[classTarget.toLowerCase()]}`
         charImg.src=src
         charImg.classList.remove('hidden')
 
-        req = await fetch(`${apiURL}/classes/${e.target.value.toLowerCase()}`)
+        req = await fetch(`${apiURL}/classes/${classTarget.toLowerCase()}`)
         res= await req.json()
         profList.innerHTML=''
 
@@ -55,9 +58,59 @@ let request = async ()=>{
             li.innerText = prof.name
             profList.append(li)
         })
+
+        req = await fetch(`${apiURL}/classes/${classTarget.toLowerCase()}/spells`)
+        res = await req.json()
+        spellList.innerHTML=''
+
+        let allSpells = []
+        res.results.forEach((spell) => {allSpells.push(spell.name)})
+        console.log(allSpells)
+
+        for(var spellLevel = 0; spellLevel < 10; spellLevel++)
+        {
+            let ul = document.createElement('ul')
+            ul.innerText = spellLevel
+            let whileLoopBoolean = true
+            while(whileLoopBoolean){
+                if(allSpells[0] < allSpells[1]){
+                    let li = document.createElement('li')
+                    li.innerText=allSpells[0]
+                    ul.append(li)
+                    allSpells.shift()
+                }
+                else{
+                    let li = document.createElement('li')
+                    li.innerText = allSpells[0]
+                    ul.append(li)
+                    allSpells.shift()  
+                    whileLoopBoolean = false
+                }
+
+            }
+            
+            spellList.append(ul)
+            
+        }
+            // let li = document.createElement('li')
+            // li.innerText=spell.name
+            // spellList.append(li)
+
+        if(allSpells){
+            spellList.classList.remove('hidden')
+            spellListLabel.classList.remove('hidden')
+        }
+        else if(spellListLabel.classList[0]!=('hidden')){
+            spellListLabel.className = 'hidden'
+            spellList.className = 'hidden'
+        }
+
+
         profList.classList.remove('hidden')
         charName.classList.remove('hidden')
         profListLabel.classList.remove('hidden')
+        
+
     })
 
     charName.addEventListener('click', async () =>{
