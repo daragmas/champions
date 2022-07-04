@@ -17,23 +17,44 @@
         <div id="character">
             <table id="character-sheet">
                 <tr>
+                    <th>
+                        <h4 id="character-name" class="hidden">New Character</h4>
+                    </th>
+                </tr>
+                <tr>
                     <td>
                         <img alt="character" id="character-img" class="hidden">
                     </td>
                     <td>
-                        <h4 id="character-name" class="hidden">New Character</h4>
                         <label id="prof-list-label" for="proficiency-list" class="hidden">Proficiencies</label>
                         <ul id="proficiency-list" class="hidden"></ul>
                     </td>
                     <td>
-                        <label id="spell-list-label" for="spell-list" class="hidden">Spells</label>
+                        <label id="spell-list-label" for="spell-list" class="hidden">Spell List</label>
                         <ul id="spell-list" class="hidden"></ul>
                     </td>
                 </tr>
             </table>
-            
-            
         </div>
-        
+        <select id="created-characters"></select>
+        <h3 id="saved-character-name" class="hidden"></h3>
+        <div id="saved-character">
+            <table id="saved-character-sheet">
+                <tr>
+                    <td>
+                        <img alt="character" id="saved-character-img" class="hidden">
+                    </td>
+                    <td>
+                        <h4 id="saved-character-name" class="hidden">New Character</h4>
+                        <label id="saved-prof-list-label" for="proficiency-list" class="hidden">Proficiencies</label>
+                        <ul id="saved-proficiency-list" class="hidden"></ul>
+                    </td>
+                    <td>
+                        <label id="saved-spell-list-label" for="spell-list" class="hidden">Spell List</label>
+                        <ul id="saved-spell-list" class="hidden"></ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>

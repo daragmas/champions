@@ -16,7 +16,6 @@ const portraitMap = {
     'warlock': '716/400/512/c3warlockintro.png'
 }
 /* To Do:
-    Add character naming
     Add character saving
     Add multiple character slots
 */
@@ -27,121 +26,125 @@ const charName = document.getElementById('character-name')
 const profListLabel = document.getElementById('prof-list-label')
 const spellListLabel = document.getElementById('spell-list-label')
 const spellList = document.getElementById('spell-list')
+const newCharacterBtn = document.getElementById('create-new-character')
 
-let request = async () => {
-    let req = await fetch(`${apiURL}/classes`)
+const savedProfList = document.getElementById('saved-proficiency-list')
+const savedCharImg = document.getElementById('saved-character-img')
+const savedCharName = document.getElementById('saved-character-name')
+const savedProfListLabel = document.getElementById('saved-prof-list-label')
+const savedSpellListLabel = document.getElementById('saved-spell-list-label')
+const savedSpellList = document.getElementById('saved-spell-list')
+
+let request = async (url) => {
+    let req = await fetch(url)
     let res = await req.json()
+    return res
+}
+
+let classSelectorPopulate= async () => {
+    res = await request(`${apiURL}classes`)
     res.results.forEach((className) => {
         let classOption = document.createElement('option')
         classOption.textContent = className.name
         classOption.value = className.name
         classSelector.appendChild(classOption)
     })
-
-    classSelector.addEventListener('change', async (e) => {
-        let classTarget = e.target.value
-        document.getElementById('selected-class').innerText = classTarget
-        let src = `${baseImageURL}${portraitMap[classTarget.toLowerCase()]}`
-        charImg.src = src
-        charImg.classList.remove('hidden')
-
-        req = await fetch(`${apiURL}/classes/${classTarget.toLowerCase()}`)
-        res = await req.json()
-        profList.innerHTML = ''
-
-        res.proficiencies.forEach((prof) => {
-            let li = document.createElement('li')
-            li.innerText = prof.name
-            profList.append(li)
-        })
-
-        req = await fetch(`${apiURL}/classes/${classTarget.toLowerCase()}/spells`)
-        res = await req.json()
-        spellList.innerHTML = ''
-
-        let allSpells = []
-        res.results.forEach((spell) => { allSpells.push(spell.name) })
-        console.log(allSpells)
-
-        if (allSpells.length != 0) {
-            spellList.classList.remove('hidden')
-            spellListLabel.classList.remove('hidden')
-            let spellLevel
-            if (allSpells.length < 60){spellLevel = 1}
-            else{spellLevel = 0}
-
-            for (spellLevel; spellLevel < 10; spellLevel++) {
-                if (allSpells.length == 0) { break }
-                else {
-                    let ul = document.createElement('ul')
-                    ul.innerText = spellLevel
-                    let whileLoopBoolean = true
-                    while (whileLoopBoolean) {
-                        let li = document.createElement('li')
-                        li.innerText = allSpells[0]
-                        ul.append(li)
-
-                        if (allSpells[0] < allSpells[1]) {
-                            allSpells.shift()
-                        }
-                        else {
-                            allSpells.shift()
-                            whileLoopBoolean = false
-                        }
-                    }
-                    spellList.append(ul)
-                }
-            }
-        }
-
-        // for(var spellLevel = 0; spellLevel < 10; spellLevel++)
-        // {
-        //     let ul = document.createElement('ul')
-        //     ul.innerText = spellLevel
-        //     let whileLoopBoolean = true
-        //     while(whileLoopBoolean){
-        //         let li = document.createElement('li')
-        //         li.innerText = allSpells[0]
-        //         ul.append(li)
-
-        //         if(allSpells[0] < allSpells[1]){
-        //             allSpells.shift()
-        //         }
-        //         else{
-        //             allSpells.shift()  
-        //             whileLoopBoolean = false
-        //         }
-        //     }
-
-        //     spellList.append(ul)
-
-        // }
-        // let li = document.createElement('li')
-        // li.innerText=spell.name
-        // spellList.append(li)
-
-        // if(allSpells){
-        //     spellList.classList.remove('hidden')
-        //     spellListLabel.classList.remove('hidden')
-        // }
-        else if (spellListLabel.classList[0] != ('hidden')) {
-            spellListLabel.className = 'hidden'
-            spellList.className = 'hidden'
-        }
-
-        profList.classList.remove('hidden')
-        charName.classList.remove('hidden')
-        profListLabel.classList.remove('hidden')
-
-
-    })
-
-    charName.addEventListener('click', async () => {
-        let currentName = charName.textContent
-        charName.textContent = prompt('Rename Character', currentName)
-        if (!charName.textContent) { charName.textContent = currentName }
-
-    })
 }
 
-request()
+classSelector.addEventListener('change', async (e) => {
+    let classTarget = e.target.value
+    document.getElementById('selected-class').innerText = classTarget
+    let src = `${baseImageURL}${portraitMap[classTarget.toLowerCase()]}`
+    charImg.src = src
+    charImg.classList.remove('hidden')
+
+    profList.innerHTML = ''
+
+    res = await request(`${apiURL}classes/${classTarget.toLowerCase()}`)
+
+    res.proficiencies.forEach((prof) => {
+        let li = document.createElement('li')
+        li.innerText = prof.name
+        profList.append(li)
+    })
+
+    res = await request(`${apiURL}/classes/${classTarget.toLowerCase()}/spells`)
+
+    spellList.innerHTML = ''
+
+    let allSpells = []
+    res.results.forEach((spell) => { allSpells.push(spell.name) })
+
+    if (allSpells.length != 0) {
+        spellList.classList.remove('hidden')
+        spellListLabel.classList.remove('hidden')
+        let spellLevel
+        if (allSpells.length < 60) { spellLevel = 1 }
+        else { spellLevel = 0 }
+
+        for (spellLevel; spellLevel < 10; spellLevel++) {
+            if (allSpells.length == 0) { break }
+            else {
+                let ul = document.createElement('ul')
+                ul.innerText = spellLevel
+                ul.className = `${spellLevel}-level-spells`
+                let whileLoopBoolean = true
+                while (whileLoopBoolean) {
+                    let li = document.createElement('li')
+                    li.innerText = allSpells[0]
+                    ul.append(li)
+
+                    if (allSpells[0] < allSpells[1]) {
+                        allSpells.shift()
+                    }
+                    else {
+                        allSpells.shift()
+                        whileLoopBoolean = false
+                    }
+                }
+                spellList.append(ul)
+            }
+        }
+    }
+    else if (spellListLabel.classList[0] != ('hidden')) {
+        spellListLabel.className = 'hidden'
+        spellList.className = 'hidden'
+    }
+
+    profList.classList.remove('hidden')
+    charName.classList.remove('hidden')
+    profListLabel.classList.remove('hidden')
+
+
+})
+
+charName.addEventListener('click', async () => {
+    let currentName = charName.textContent
+    charName.textContent = prompt('Rename Character', currentName)
+    if (!charName.textContent) { charName.textContent = currentName }
+
+})
+
+classSelectorPopulate()
+
+newCharacterBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    // console.log(e)
+    // console.log(spellList)
+    const newCharacter = {
+        name: charName.textContent,
+        class: classSelector.value,
+        proficiencies: profList.textContent,
+        imgURl: charImg.src,
+        // classSpellList : spellList.textContent
+    }
+    console.log(newCharacter)
+
+    fetch('https://localhost:3000/characters', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(newCharacter)
+    })
+        .then(result => console.log(result))
+    // console.log(res)
+})

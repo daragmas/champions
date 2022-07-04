@@ -15,3 +15,7 @@ td{
     justify-content: left;
     vertical-align: top;
 }
+
+#0-level-spells{
+    border-bottom:1px black solid;
+}
