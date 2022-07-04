@@ -11,7 +11,7 @@ body{
     width: 350px;
 }
 
-#character-sheet{
+td{
     justify-content: left;
-    text-align:start
+    vertical-align: top;
 }
