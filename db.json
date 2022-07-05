@@ -1,15 +1,22 @@
 {
-  "characters": {
-    "test": {
+  "characters": [
+    {
       "name": "test",
       "class": "barbarian",
-      "proficiencies": [],
-      "imgUrl":""
+      "proficiencies": ["testing stuff", "raging"],
+      "imgUrl": "",
+      "id": 0
     },
-    "timmy": {
+    {
       "name": "timmy",
       "class": "cleric",
-      "proficiencies": ["testing code", "being a bro", "SSMB:Ultimate"],
-      "imgUrl": "https://www.d20pfsrd.com/wp-content/uploads/sites/12/2017/01/cleric_comm_by_yamao-d5ooj81-320-2.png"}
+      "proficiencies": [
+        "testing code",
+        "being a bro",
+        "SSMB:Ultimate"
+      ],
+      "imgUrl": "https://www.d20pfsrd.com/wp-content/uploads/sites/12/2017/01/cleric_comm_by_yamao-d5ooj81-320-2.png",
+      "id": 1
     }
+  ]
 }

@@ -16,8 +16,8 @@ const portraitMap = {
     'warlock': '716/400/512/c3warlockintro.png'
 }
 /* To Do:
-    Add character saving
-    Add multiple character slots
+    Fix proficiency list when saving a character
+    Stop page from refreshing when saving a character
 */
 
 const charImg = document.getElementById('character-img')
@@ -42,7 +42,7 @@ let request = async (url) => {
     return res
 }
 
-let classSelectorPopulate= async () => {
+let classSelectorPopulate = async () => {
     res = await request(`${apiURL}classes`)
     res.results.forEach((className) => {
         let classOption = document.createElement('option')
@@ -52,13 +52,13 @@ let classSelectorPopulate= async () => {
     })
 }
 
-let savedCharactersPopulate = async () =>{
+let savedCharactersPopulate = async () => {
     res = await request('http://localhost:3000/characters')
     // console.log(res)
-    Object.keys(res).forEach((savedCharacter) => {
+    res.forEach((savedCharacter) => {
         let savedCharacterOption = document.createElement('option')
-        savedCharacterOption.textContent = savedCharacter
-        savedCharacterOption.value = savedCharacter
+        savedCharacterOption.textContent = savedCharacter.name
+        savedCharacterOption.value = savedCharacter.name
         savedCharacterSelector.appendChild(savedCharacterOption)
     })
 }
@@ -137,54 +137,57 @@ charName.addEventListener('click', async () => {
 
 })
 
-newCharacterBtn.addEventListener('click', (e) => {
+newCharacterBtn.addEventListener('click', async (e) => {
     e.preventDefault()
-    // console.log(e)
-    // console.log(spellList)
+    // let saveID = charName.textContent
     const newCharacter = {
-        name: charName.textContent,
-        class: classSelector.value,
-        proficiencies: profList.textContent,
-        imgURl: charImg.src,
-        // classSpellList : spellList.textContent
-    }
+            name: charName.textContent,
+            class: classSelector.value,
+            proficiencies: profList.textContent,
+            imgURl: charImg.src,
+            // classSpellList : spellList.textContent
+        }
     console.log(newCharacter)
+    console.log(JSON.stringify(newCharacter))
 
-    fetch('https://localhost:3000/characters', {
+    fetch('http://localhost:3000/characters', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', },
-        body: JSON.stringify(newCharacter)
+        body: JSON.stringify(newCharacter),
+        headers: { 'Content-type': "application/json; charset=UTF-8" }
     })
         .then(result => console.log(result))
-    // console.log(res)
+            // console.log(res)
 })
 
-savedCharacterSelector.addEventListener('change', async (e)=>{
+savedCharacterSelector.addEventListener('change', async (e) => {
     let targetChar = e.target.value
     res = await request(`http://localhost:3000/characters/`)
-    console.log(res[`${targetChar}`])
-    let savedCharData = res[`${targetChar}`]
+    // console.log(res)
+    // res.forEach((c)=>console.log(c.name))
+    // console.log(res.findIndex((c)=>c.name===targetChar))
+    let savedCharIndex = res.findIndex((c)=>c.name===targetChar)
+    // console.log(savedCharIndex)
+    let savedCharData = res[savedCharIndex]
+    savedProfList.innerHTML=''
 
-    savedCharData.proficiencies.forEach((proficiency)=>{
+    savedCharData.proficiencies.forEach((proficiency) => {
         let li = document.createElement('li')
         li.innerText = proficiency
         savedProfList.append(li)
     })
 
-    console.log(savedCharData)
+    // console.log(savedCharData)
 
     savedCharImg.setAttribute('src', `${savedCharData.imgUrl}`)
-    savedCharImg.setAttribute('alt',`${savedCharData.name} the ${savedCharData['class']}`)
+    savedCharImg.setAttribute('alt', `${savedCharData.name} the ${savedCharData['class']}`)
 
-    savedCharName.textContent= savedCharData.name
+    savedCharName.textContent = savedCharData.name
     savedProfList.classList.remove('hidden')
     savedCharImg.classList.remove('hidden')
     savedCharName.classList.remove('hidden')
     savedProfListLabel.classList.remove('hidden')
     savedSpellListLabel.classList.remove('hidden')
     savedSpellList.classList.remove('hidden')
-
-
 })
 
 classSelectorPopulate()
