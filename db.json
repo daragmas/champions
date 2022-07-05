@@ -1,10 +1,15 @@
 {
-  "characters": [
-    {
+  "characters": {
+    "test": {
       "name": "test",
       "class": "barbarian",
       "proficiencies": [],
       "imgUrl":""
+    },
+    "timmy": {
+      "name": "timmy",
+      "class": "cleric",
+      "proficiencies": ["testing code", "being a bro", "SSMB:Ultimate"],
+      "imgUrl": "https://www.d20pfsrd.com/wp-content/uploads/sites/12/2017/01/cleric_comm_by_yamao-d5ooj81-320-2.png"}
     }
-  ]
 }

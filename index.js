@@ -28,6 +28,7 @@ const spellListLabel = document.getElementById('spell-list-label')
 const spellList = document.getElementById('spell-list')
 const newCharacterBtn = document.getElementById('create-new-character')
 
+const savedCharacterSelector = document.getElementById('created-characters')
 const savedProfList = document.getElementById('saved-proficiency-list')
 const savedCharImg = document.getElementById('saved-character-img')
 const savedCharName = document.getElementById('saved-character-name')
@@ -48,6 +49,17 @@ let classSelectorPopulate= async () => {
         classOption.textContent = className.name
         classOption.value = className.name
         classSelector.appendChild(classOption)
+    })
+}
+
+let savedCharactersPopulate = async () =>{
+    res = await request('http://localhost:3000/characters')
+    // console.log(res)
+    Object.keys(res).forEach((savedCharacter) => {
+        let savedCharacterOption = document.createElement('option')
+        savedCharacterOption.textContent = savedCharacter
+        savedCharacterOption.value = savedCharacter
+        savedCharacterSelector.appendChild(savedCharacterOption)
     })
 }
 
@@ -125,8 +137,6 @@ charName.addEventListener('click', async () => {
 
 })
 
-classSelectorPopulate()
-
 newCharacterBtn.addEventListener('click', (e) => {
     e.preventDefault()
     // console.log(e)
@@ -148,3 +158,34 @@ newCharacterBtn.addEventListener('click', (e) => {
         .then(result => console.log(result))
     // console.log(res)
 })
+
+savedCharacterSelector.addEventListener('change', async (e)=>{
+    let targetChar = e.target.value
+    res = await request(`http://localhost:3000/characters/`)
+    console.log(res[`${targetChar}`])
+    let savedCharData = res[`${targetChar}`]
+
+    savedCharData.proficiencies.forEach((proficiency)=>{
+        let li = document.createElement('li')
+        li.innerText = proficiency
+        savedProfList.append(li)
+    })
+
+    console.log(savedCharData)
+
+    savedCharImg.setAttribute('src', `${savedCharData.imgUrl}`)
+    savedCharImg.setAttribute('alt',`${savedCharData.name} the ${savedCharData['class']}`)
+
+    savedCharName.textContent= savedCharData.name
+    savedProfList.classList.remove('hidden')
+    savedCharImg.classList.remove('hidden')
+    savedCharName.classList.remove('hidden')
+    savedProfListLabel.classList.remove('hidden')
+    savedSpellListLabel.classList.remove('hidden')
+    savedSpellList.classList.remove('hidden')
+
+
+})
+
+classSelectorPopulate()
+savedCharactersPopulate()

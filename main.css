@@ -6,7 +6,7 @@ body{
     display: none;
 }
 
-#character-img{
+#character-img, #saved-character-img{
     height: 350px;
     width: 350px;
 }
