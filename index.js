@@ -139,34 +139,35 @@ charName.addEventListener('click', async () => {
 
 newCharacterBtn.addEventListener('click', async (e) => {
     e.preventDefault()
-    // let saveID = charName.textContent
+    let newCharProfs = profList.innerHTML.split('<li>')
+    let moddedNewCharProfs = []
+    newCharProfs.shift()
+    newCharProfs.forEach((p)=>{
+        p=p.split('<')
+        p=p.shift()
+        moddedNewCharProfs.push(p)
+    })
+    console.log(newCharProfs)
+    console.log(moddedNewCharProfs)
     const newCharacter = {
             name: charName.textContent,
             class: classSelector.value,
-            proficiencies: profList.textContent,
+            proficiencies: moddedNewCharProfs,
             imgURl: charImg.src,
             // classSpellList : spellList.textContent
         }
-    console.log(newCharacter)
-    console.log(JSON.stringify(newCharacter))
 
     fetch('http://localhost:3000/characters', {
         method: 'POST',
         body: JSON.stringify(newCharacter),
         headers: { 'Content-type': "application/json; charset=UTF-8" }
     })
-        .then(result => console.log(result))
-            // console.log(res)
 })
 
 savedCharacterSelector.addEventListener('change', async (e) => {
     let targetChar = e.target.value
     res = await request(`http://localhost:3000/characters/`)
-    // console.log(res)
-    // res.forEach((c)=>console.log(c.name))
-    // console.log(res.findIndex((c)=>c.name===targetChar))
     let savedCharIndex = res.findIndex((c)=>c.name===targetChar)
-    // console.log(savedCharIndex)
     let savedCharData = res[savedCharIndex]
     savedProfList.innerHTML=''
 
@@ -175,8 +176,6 @@ savedCharacterSelector.addEventListener('change', async (e) => {
         li.innerText = proficiency
         savedProfList.append(li)
     })
-
-    // console.log(savedCharData)
 
     savedCharImg.setAttribute('src', `${savedCharData.imgUrl}`)
     savedCharImg.setAttribute('alt', `${savedCharData.name} the ${savedCharData['class']}`)

@@ -3,7 +3,10 @@
     {
       "name": "test",
       "class": "barbarian",
-      "proficiencies": ["testing stuff", "raging"],
+      "proficiencies": [
+        "testing stuff",
+        "raging"
+      ],
       "imgUrl": "",
       "id": 0
     },
@@ -17,6 +20,18 @@
       ],
       "imgUrl": "https://www.d20pfsrd.com/wp-content/uploads/sites/12/2017/01/cleric_comm_by_yamao-d5ooj81-320-2.png",
       "id": 1
+    },
+    {
+      "name": "Paul",
+      "class": "Fighter",
+      "proficiencies": [
+        "All armor",
+        "Shields",
+        "Simple Weapons",
+        "Martial Weapons"
+      ],
+      "imgURl": "https://www.dndbeyond.com/attachments/thumbnails/0/697/400/475/c3fighterintro.png",
+      "id": 3
     }
   ]
 }
